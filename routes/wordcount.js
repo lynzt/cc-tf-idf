@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
   utils.readFile('lib/files/rainbows.txt').then(fileContents => {
     let fileCounts = {};
     let keys = [];
-    let fileWords = fileContents.split(/\W+/);
+    let fileWords = fileContents.split(/[^\w']+/);
 
     for (let word of fileWords) {
       if (!utils.isNumeric(word)) {
@@ -21,16 +21,15 @@ router.get('/', function(req, res, next) {
     for (let key of keys) {
       console.log(key + " : " + fileCounts[key]);
     }
+    res.render('wordcount/index',
+      { title: 'wordcount'
+      , keys: keys
+      , fileCounts: fileCounts
+    });
   }).catch(err => {
-    console.log("An error... ", e);
-  })
-
-  // }).catch(function(e) {
-  //     console.log("Error reading file", e);
-  //     res.render('wordcount/index', { title: 'wordcount' });
-  // });
-
-  res.render('wordcount/index', { title: 'wordcount' });
+    console.log("An error... ");
+    console.dir(err);
+  });
 });
 
 function processWord(fileCounts, word, keys) {

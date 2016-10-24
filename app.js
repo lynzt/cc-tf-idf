@@ -4,16 +4,23 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var fs = require('fs');
+var hbs = require('hbs');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var wordcount = require('./routes/wordcount');
 
+var hbs_helpers = require('./views/helpers/hbs_helpers');
+
 var app = express();
 
+hbs.registerHelper(hbs_helpers);
+
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+app.set('views', path.join(__dirname, 'views'));
+app.engine('hbs', hbs.__express);
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
